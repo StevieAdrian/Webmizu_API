@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../utils/ApiError';
+import supabase from '../lib/supabase';
 
-const auth = (req: Request, _res: Response, next: NextFunction): void => {
-  // jwt verif (to be implemented)
+const auth = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -10,10 +10,12 @@ const auth = (req: Request, _res: Response, next: NextFunction): void => {
   }
 
   try {
-    // verify token & attach user to request (to be implemented)
-    // const token = authHeader.split(' ')[1];
-    // const decoded = jwt.verify(token, config.jwt.secret);
-    // req.user = decoded;
+    const token = authHeader.split(' ')[1];
+    const { data, error } = await supabase.auth.getUser(token);
+
+    if (error || !data.user) return next(new ApiError(401, 'Invalid or expired token'));
+
+    (req as any).user = data.user;
     next();
   } catch {
     next(new ApiError(401, 'Invalid or expired token'));

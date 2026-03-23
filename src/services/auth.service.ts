@@ -1,5 +1,4 @@
 import ApiError from '../utils/ApiError';
-import { USER_TABLE } from '../models';
 import supabase from '../lib/supabase';
 
 interface RegisterBody {
@@ -8,46 +7,67 @@ interface RegisterBody {
   password: string;
 }
 
-interface LoginResult {
-  email: string;
-  token: string;
-}
-
-const register = async (userBody: RegisterBody): Promise<RegisterBody> => {
-  const { data: existing } = await supabase
-    .from(USER_TABLE)
-    .select('id')
-    .eq('email', userBody.email)
-    .single();
-
-  if (existing) {
-    throw new ApiError(400, 'Email already taken');
-  }
-
-  const { error } = await supabase
-    .from(USER_TABLE)
-    .insert({ ...userBody, role: 'user' });
+const register = async (userBody: RegisterBody) => {
+  const { data, error } = await supabase.auth.signUp({
+    email: userBody.email,
+    password: userBody.password,
+    options: {
+      data: {
+        name: userBody.name,
+      },
+    },
+  });
 
   if (error) throw new ApiError(400, error.message);
-  return userBody;
+
+  return {
+    user: data.user,
+    session: data.session,
+  };
 };
 
-const login = async (email: string, _password: string): Promise<LoginResult> => {
-  const { data: user, error } = await supabase
-    .from(USER_TABLE)
-    .select('*')
-    .eq('email', email)
-    .single();
+const login = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-  if (error || !user) {
-    throw new ApiError(401, 'Incorrect email or password');
-  }
+  if (error) throw new ApiError(401, error.message);
 
-  // todo: Verify password
-  return { email, token: 'placeholder-token' };
+  return {
+    user: data.user,
+    session: {
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+      expires_at: data.session.expires_at,
+    },
+  };
+};
+
+const logout = async (accessToken: string) => {
+  const { error } = await supabase.auth.admin.signOut(accessToken);
+  if (error) throw new ApiError(400, error.message);
+};
+
+const refreshToken = async (refresh_token: string) => {
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
+
+  if (error) throw new ApiError(401, error.message);
+  if (!data.session) throw new ApiError(401, 'Failed to refresh session');
+
+  return {
+    user: data.user,
+    session: {
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+      expires_at: data.session.expires_at,
+    },
+  };
 };
 
 export default {
   register,
   login,
+  logout,
+  refreshToken,
 };
