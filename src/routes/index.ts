@@ -3,6 +3,7 @@ import authRoutes from './auth.routes';
 import userRoutes from './user.routes';
 import taskRoutes from './task.routes';
 import technicianRoutes from './technician.routes';
+import customerProductRoutes from './customerProduct.routes';
 
 const router = Router();
 
@@ -11,6 +12,7 @@ const routes = [
   { path: '/users', route: userRoutes },
   { path: '/tasks', route: taskRoutes },
   { path: '/technicians', route: technicianRoutes },
+  { path: '/customer-products', route: customerProductRoutes },
 ];
 
 routes.forEach((route) => {
