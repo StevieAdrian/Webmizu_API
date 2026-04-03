@@ -6,3 +6,8 @@ export {
 	ICustomerProductFilters,
 	CUSTOMER_PRODUCT_TABLE,
 } from './customerProduct.model';
+export {
+    IProductCatalog,
+    IProductCatalogFilters,
+    PRODUCT_CATALOG_TABLE,
+} from './productCatalog.model';
