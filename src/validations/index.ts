@@ -5,3 +5,4 @@ export { default as technicianValidation } from './technician.validation';
 export { default as customerProductValidation } from './customerProduct.validation';
 export { default as productCatalogValidation } from './productCatalog.validation';
 export { default as serviceLogValidation } from './serviceLog.validation';
+export { default as contractValidation } from './contract.validation';

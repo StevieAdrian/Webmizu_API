@@ -5,3 +5,4 @@ export { default as technicianService } from './technician.service';
 export { default as customerProductService } from './customerProduct.service';
 export { default as productCatalogService } from './productCatalog.service';
 export { default as serviceLogService } from './serviceLog.service';
+export { default as contractService } from './contract.service';

@@ -16,3 +16,8 @@ export {
 	IServiceLogFilters,
 	SERVICE_LOG_TABLE,
 } from './serviceLog.model';
+export {
+    IContract,
+    IContractFilters,
+    CONTRACTS_TABLE,
+} from './contract.model';

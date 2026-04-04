@@ -5,3 +5,4 @@ export { default as technicianController } from './technician.controller';
 export { default as customerProductController } from './customerProduct.controller';
 export { default as productCatalogController } from './productCatalog.controller';
 export { default as serviceLogController } from './serviceLog.controller';
+export { default as contractController } from './contract.controller';
