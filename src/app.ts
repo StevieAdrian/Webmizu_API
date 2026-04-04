@@ -11,6 +11,8 @@ import ApiError from './utils/ApiError';
 
 const app = express();
 
+app.set('etag', false);
+
 // Request logging (morgan)
 if (config.env !== 'test') {
   app.use(successHandler);
@@ -28,6 +30,16 @@ app.use(cors({ origin: config.cors.origin }));
 app.use(hpp());
 
 app.use(rateLimiter);
+
+app.use('/api/v1', (_req: Request, res: Response, next: NextFunction) => {
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    Pragma: 'no-cache',
+    Expires: '0',
+    'Surrogate-Control': 'no-store',
+  });
+  next();
+});
 
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
