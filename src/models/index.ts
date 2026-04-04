@@ -11,3 +11,8 @@ export {
     IProductCatalogFilters,
     PRODUCT_CATALOG_TABLE,
 } from './productCatalog.model';
+export {
+	IServiceLog,
+	IServiceLogFilters,
+	SERVICE_LOG_TABLE,
+} from './serviceLog.model';

@@ -5,6 +5,7 @@ import taskRoutes from './task.routes';
 import technicianRoutes from './technician.routes';
 import customerProductRoutes from './customerProduct.routes';
 import productCatalogRoutes from './productCatalog.routes';
+import serviceLogRoutes from './serviceLog.routes';
 
 const router = Router();
 
@@ -15,6 +16,7 @@ const routes = [
   { path: '/technicians', route: technicianRoutes },
   { path: '/customer-products', route: customerProductRoutes },
   { path: '/product-catalog', route: productCatalogRoutes },
+  { path: '/service-logs', route: serviceLogRoutes },
 ];
 
 routes.forEach((route) => {
